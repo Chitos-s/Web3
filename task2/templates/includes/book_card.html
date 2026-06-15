@@ -1,0 +1,34 @@
+{% load book_extras %}
+
+<article class="book-card">
+    <div>
+        <h2>{{ book.title|title }}</h2>
+        <p class="muted">{{ book.author|initials }}</p>
+    </div>
+
+    {% availability_label book as status %}
+    <span class="badge {% if not book.in_stock %}out{% endif %}">{{ status }}</span>
+
+    <dl class="meta">
+        <div>
+            <dt>Жанр</dt>
+            <dd>{{ book.genre|badge }}</dd>
+        </div>
+        <div>
+            <dt>Дата публикации</dt>
+            <dd>{{ book.publication_date|date:"d E Y" }}</dd>
+        </div>
+        <div>
+            <dt>Страниц</dt>
+            <dd>{{ book.pages }}</dd>
+        </div>
+        <div>
+            <dt>Время чтения</dt>
+            <dd>{% reading_time book.pages %}</dd>
+        </div>
+        <div>
+            <dt>Цена</dt>
+            <dd>{{ book.price|rubles }}</dd>
+        </div>
+    </dl>
+</article>

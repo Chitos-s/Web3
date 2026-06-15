@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load book_extras %}
+
+{% block title %}Каталог книг{% endblock %}
+
+{% block content %}
+    <section class="summary">
+        <div>
+            <h1>{% catalog_title books|length %}</h1>
+            <p class="muted">
+                Простая страница каталога на Django.
+            </p>
+        </div>
+        <p class="muted">Всего позиций: {{ books|length }}</p>
+    </section>
+
+    <section class="grid">
+        {% for book in books %}
+            {% include "includes/book_card.html" %}
+        {% empty %}
+            <p class="muted">Книги пока не добавлены. Добавьте записи через админ-панель или shell.</p>
+        {% endfor %}
+    </section>
+{% endblock %}

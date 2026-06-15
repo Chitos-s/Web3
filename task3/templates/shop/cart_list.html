@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Корзины</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            color: #1f2933;
+        }
+
+        main {
+            width: min(1000px, calc(100% - 32px));
+            margin: 0 auto;
+            padding: 32px 0;
+        }
+
+        h1 {
+            margin: 0 0 20px;
+            font-size: 32px;
+        }
+
+        .cart {
+            margin-bottom: 16px;
+            padding: 18px;
+            border: 1px solid #d8dee6;
+            border-radius: 8px;
+            background: white;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+
+        h2 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .status {
+            height: fit-content;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: #e6f4ea;
+            color: #146c43;
+            font-weight: 700;
+        }
+
+        .meta {
+            margin: 0 0 12px;
+            color: #5f6b7a;
+        }
+
+        ul {
+            margin: 8px 0 0;
+            padding-left: 20px;
+        }
+
+        .empty {
+            padding: 18px;
+            background: white;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <h1>Список корзин</h1>
+
+        {% for cart in carts %}
+            <article class="cart">
+                <div class="cart-header">
+                    <h2>Корзина #{{ cart.id }}</h2>
+                    <span class="status">{{ cart.get_status_display }}</span>
+                </div>
+
+                <p class="meta">
+                    Покупатель: {{ cart.customer.name }} |
+                    Email: {{ cart.customer.email }} |
+                    Дата: {{ cart.created_at|date:"d.m.Y H:i" }} |
+                    Товаров: {{ cart.product_count }}
+                </p>
+
+                <strong>Товары:</strong>
+                <ul>
+                    {% for product in cart.products.all %}
+                        <li>{{ product.name }} - {{ product.price }} руб.</li>
+                    {% endfor %}
+                </ul>
+            </article>
+        {% empty %}
+            <p class="empty">Корзин пока нет.</p>
+        {% endfor %}
+    </main>
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Каталог книг{% endblock %}</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #f5f7fb;
+            --text: #18202f;
+            --muted: #667085;
+            --line: #d9e0ea;
+            --card: #ffffff;
+            --accent: #1f7a68;
+            --accent-soft: #e4f3ef;
+            --warn: #9b3d30;
+            --warn-soft: #fbe9e6;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        header {
+            border-bottom: 1px solid var(--line);
+            background: var(--card);
+        }
+
+        main,
+        .topbar {
+            width: min(1120px, calc(100% - 32px));
+            margin: 0 auto;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 64px;
+            gap: 16px;
+        }
+
+        .brand {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        main {
+            padding: 32px 0 48px;
+        }
+
+        .summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            margin: 0 0 8px;
+            font-size: 32px;
+        }
+
+        .muted {
+            color: var(--muted);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .book-card {
+            display: grid;
+            gap: 12px;
+            padding: 18px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: var(--card);
+        }
+
+        .book-card h2 {
+            margin: 0;
+            font-size: 21px;
+        }
+
+        .meta {
+            display: grid;
+            gap: 4px;
+            margin: 0;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .meta div {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            border-bottom: 1px dashed var(--line);
+            padding-bottom: 4px;
+        }
+
+        .badge {
+            width: fit-content;
+            padding: 4px 8px;
+            border-radius: 999px;
+            background: var(--accent-soft);
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .badge.out {
+            background: var(--warn-soft);
+            color: var(--warn);
+        }
+
+        footer {
+            padding: 24px 0;
+            border-top: 1px solid var(--line);
+            text-align: center;
+            color: var(--muted);
+            background: var(--card);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="topbar">
+            <p class="brand">BookLab</p>
+            <span class="muted">Лабораторная работа 1</span>
+        </div>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    <footer>
+        Django: модели, шаблоны, теги и фильтры
+    </footer>
+</body>
+</html>
