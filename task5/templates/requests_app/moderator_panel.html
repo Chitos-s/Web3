@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="card">
+    <h2>Панель модератора</h2>
+    <p>Здесь можно просматривать очередь заявок и журнал аудита по отдельным вкладкам.</p>
+</section>
+
+<nav class="tabs">
+    <a href="?tab=queue" class="{% if active_tab == 'queue' %}active{% endif %}">Очередь заявок</a>
+    <a href="?tab=audit" class="{% if active_tab == 'audit' %}active{% endif %}">Audit log</a>
+</nav>
+
+{% if active_tab == 'queue' %}
+<section class="card">
+    <h3>Очередь заявок</h3>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Заявка</th>
+                <th>Статус</th>
+                <th>Владелец</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in queue %}
+                <tr>
+                    <td><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></td>
+                    <td>{{ item.get_status_display }}</td>
+                    <td>{{ item.owner.username }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="3">Активных заявок нет.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% else %}
+<section class="card">
+    <h3>Audit log</h3>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Время</th>
+                <th>Пользователь</th>
+                <th>Метод</th>
+                <th>Путь</th>
+                <th>IP</th>
+                <th>Статус</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in latest_audit %}
+                <tr>
+                    <td>{{ item.created_at|date:"d.m.Y H:i" }}</td>
+                    <td>{{ item.username_snapshot|default:"анонимный" }}</td>
+                    <td>{{ item.method }}</td>
+                    <td class="full-text">{{ item.path }}</td>
+                    <td>{{ item.ip_address|default:"-" }}</td>
+                    <td><strong>{{ item.status_code }}</strong></td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6">Записей аудита пока нет.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endif %}
+{% endblock %}

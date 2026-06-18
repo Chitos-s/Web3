@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Вход{% endblock %}
+
+{% block content %}
+<div class="page-center">
+    <section class="card narrow">
+        <h2>Вход в портал</h2>
+        <p class="help-text">Введите логин и пароль для доступа к порталу заявок.</p>
+        <form method="post" class="stack">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Войти</button>
+        </form>
+    </section>
+</div>
+{% endblock %}

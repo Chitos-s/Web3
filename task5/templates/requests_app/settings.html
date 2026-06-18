@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="card">
+    <h2>Настройки портала</h2>
+    <p class="help-text">Выберите тему интерфейса и количество записей на странице. Чтобы тема применилась, нажмите «Сохранить».</p>
+    <form method="post" class="stack">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Сохранить</button>
+    </form>
+</section>
+{% endblock %}

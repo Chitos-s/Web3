@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="card">
+    <div class="section-head">
+        <div>
+            <h2>{{ request_obj.title }}</h2>
+            <p>{{ request_obj.get_service_type_display }} • {{ request_obj.get_priority_display }}</p>
+        </div>
+        <a class="button-link" href="{% url 'request-update' request_obj.pk %}">Редактировать</a>
+    </div>
+    <p>{{ request_obj.description }}</p>
+    <dl>
+        <dt>Статус</dt><dd>{{ request_obj.get_status_display }}</dd>
+        <dt>Владелец</dt><dd>{{ request_obj.owner.username }}</dd>
+        <dt>Исполнитель</dt><dd>{{ request_obj.assigned_to|default:"Не назначен" }}</dd>
+        <dt>Срок</dt><dd>{{ request_obj.due_date|date:"d.m.Y"|default:"Не указан" }}</dd>
+        <dt>Вложение</dt><dd>{% if request_obj.attachment %}<a href="{{ request_obj.attachment.url }}">Скачать файл</a>{% else %}Нет{% endif %}</dd>
+    </dl>
+</section>
+
+<section class="card">
+    <h3>Комментарии</h3>
+    <div class="stack">
+        {% for comment in visible_comments %}
+            <article class="comment">
+                <strong>{{ comment.author.username }}</strong>
+                <span>{{ comment.created_at|date:"d.m.Y H:i" }}</span>
+                {% if comment.is_internal %}<em>Внутренний</em>{% endif %}
+                <p>{{ comment.text }}</p>
+            </article>
+        {% empty %}
+            <p>Комментариев пока нет.</p>
+        {% endfor %}
+    </div>
+    <form method="post" class="stack">
+        {% csrf_token %}
+        {{ comment_form.as_p }}
+        <button type="submit">Добавить комментарий</button>
+    </form>
+</section>
+
+<section class="card">
+    <h3>История изменений</h3>
+    <div class="stack">
+        {% for record in request_obj.history.all %}
+            <article class="history-row">
+                <strong>{{ record.field_name }}</strong>
+                <span>{{ record.created_at|date:"d.m.Y H:i" }}</span>
+                <p>{{ record.old_value }} → {{ record.new_value }}</p>
+            </article>
+        {% empty %}
+            <p>Изменений пока нет.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

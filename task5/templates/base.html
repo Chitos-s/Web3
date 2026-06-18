@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Корпоративный портал заявок{% endblock %}</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body class="{% if portal_theme == 'dark' %}dark-theme{% endif %}">
+    <header class="site-header">
+        <div>
+            <p class="eyebrow">Портал заявок на Django</p>
+            <h1><a href="{% url 'request-list' %}">Корпоративный портал заявок</a></h1>
+        </div>
+        <nav class="main-nav">
+            {% if request.user.is_authenticated %}
+                <a href="{% url 'request-create' %}">Новая заявка</a>
+                <a href="{% url 'user-settings' %}">Настройки</a>
+                {% if portal_role == 'moderator' or portal_role == 'admin' %}
+                    <a href="{% url 'moderator-panel' %}">Панель модератора</a>
+                {% endif %}
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit">Выйти</button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}">Войти</a>
+            {% endif %}
+        </nav>
+    </header>
+    <main class="layout{% if request.user.is_authenticated %} has-sidebar{% else %} no-sidebar{% endif %}">
+        {% if request.user.is_authenticated %}
+            <aside class="sidebar">
+                <p><strong>{{ request.user.get_full_name|default:request.user.username }}</strong></p>
+                <p>Роль: {{ portal_role_label }}</p>
+                <p>
+                    Идентификатор запроса:
+                    <span class="full-text" title="{{ request.request_id }}">{{ request.request_id|default:"-" }}</span>
+                </p>
+            </aside>
+        {% endif %}
+        <section class="content">
+            {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <div class="message">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% block content %}{% endblock %}
+        </section>
+    </main>
+</body>
+</html>

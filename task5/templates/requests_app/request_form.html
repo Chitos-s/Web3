@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="card">
+    <h2>{% if is_create %}Создание заявки{% else %}Редактирование заявки{% endif %}</h2>
+    <form method="post" enctype="multipart/form-data" class="stack">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {% if not is_create and form.instance.attachment %}
+            <p class="attachment-actions">
+                <span class="attachment-current">Текущее вложение: <a href="{{ form.instance.attachment.url }}">{{ form.instance.attachment.name }}</a></span>
+                <button type="submit" name="clear_attachment" value="1" class="attachment-clear-button">Удалить вложение</button>
+            </p>
+        {% endif %}
+        <button type="submit">{% if is_create %}Создать{% else %}Сохранить{% endif %}</button>
+    </form>
+</section>
+{% endblock %}
